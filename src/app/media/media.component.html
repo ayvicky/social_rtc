@@ -31,9 +31,58 @@
         <h5 class="card-title">{{ user }}</h5>
         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
           content.</p>
-        <button class="btn btn-outline-secondary" type="button" (click)="videoCalling(user)"> Video Call </button>
+        <button class="btn btn-outline-secondary" type="button" (click)="videoCalling(user)" > Video Call </button>
         <button class="btn btn-outline-secondary" type="button" (click)="audioCalling(user)"> Audio Call </button>
 
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Incomming call Modal -->
+<div class="modal fade" [ngClass]="{'show': incommingDisplay}" id="incommingCallModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Outgoing Call</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Outgoing call Modal -->
+<div class="modal fade" id="outgoingCallModel"  [ngClass]="{'show': outgoingDisplay}"  tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Incomming Call</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
