@@ -1,0 +1,40 @@
+<hr>
+<div class="container">
+  <div class="jumbotron">
+    <h1>Welcome</h1>
+    <h2>Audio & Video Calling with WebRTC & Socket</h2>
+  </div>
+  <div class="panel panel-primary">
+    <div class="panel-heading">Go Online</div>
+    <div class="panel-body">
+      <h3> </h3>
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"
+          aria-describedby="basic-addon2" [(ngModel)]="username">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" [disabled]="btnDisableOnline" (click)="goOnline()">GO
+            Online!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+
+<div class="container">
+  <div *ngFor="let user of onlineusers">
+    <div class="card" style="width: 18rem;" *ngIf="user !== username">
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpdX6tPX96Zk00S47LcCYAdoFK8INeCElPeJrVDrh8phAGqUZP_g"
+        class="card-img-top" alt="image">
+      <div class="card-body">
+        <h5 class="card-title">{{ user }}</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+          content.</p>
+        <button class="btn btn-outline-secondary" type="button" (click)="videoCalling(user)"> Video Call </button>
+        <button class="btn btn-outline-secondary" type="button" (click)="audioCalling(user)"> Audio Call </button>
+
+      </div>
+    </div>
+  </div>
+</div>
