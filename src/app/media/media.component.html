@@ -22,6 +22,20 @@
 <hr>
 
 <div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading"> {{ username }} </div>
+        <div class="panel-body">
+          <h3 *ngIf="username"> {{ username }} </h3>
+          <video id="localVideo" autoplay muted></video>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+          <div class="panel-heading"> Other User! </div>
+          <div class="panel-body">
+            <h3 *ngIf="callename"> {{ callename }} </h3>
+            <video id="remoteVideo" autoplay></video>
+          </div>
+        </div>
   <div *ngFor="let user of onlineusers">
     <div class="card" style="width: 18rem;" *ngIf="user !== username">
       <img
@@ -34,8 +48,6 @@
         <button class="btn btn-outline-secondary" type="button" (click)="videoCalling(user)" > Video Call </button>
         <button class="btn btn-outline-secondary" type="button" (click)="audioCalling(user)"> Audio Call </button>
 
-        <video id="localVideo" autoplay muted></video>
-        <video id="remoteVideo" autoplay></video>
         <p *ngIf="localVideo"> local video found</p>
         <p *ngIf="remoteVideo"> remote video found</p>
         
