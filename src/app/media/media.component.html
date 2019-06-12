@@ -36,6 +36,9 @@
 
         <video id="localVideo" autoplay muted></video>
         <video id="remoteVideo" autoplay></video>
+        <p *ngIf="localVideo"> local video found</p>
+        <p *ngIf="remoteVideo"> remote video found</p>
+        
       </div>
     </div>
   </div>
