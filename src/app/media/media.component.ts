@@ -21,6 +21,8 @@ export class MediaComponent implements OnInit {
   yourConn: any;
   stream: any;
 
+  logs: any;
+
   rtc_data: [];
 
   // call models / popups
@@ -31,10 +33,12 @@ export class MediaComponent implements OnInit {
   isOutgoing= false;
 
   constructor() {
-    this.socket = io('https://social-funda.herokuapp.com/');
+    
   }
 
   ngOnInit() {
+
+    this.socket = io('https://social-funda.herokuapp.com/');
 
     this.socket.on('onlineusers', data => {
       console.log('online user');
@@ -42,6 +46,7 @@ export class MediaComponent implements OnInit {
       console.log(this.onlineusers);
     });
 
+    this.logs = document.querySelector('#logs');
     this.remoteVideo = document.querySelector('#remoteVideo');
     this.localVideo = document.querySelector('#localVideo');
 
@@ -51,7 +56,7 @@ export class MediaComponent implements OnInit {
 
     this.socket.on('rtc-manager', data => {
       this.rtc_data = data;
-
+      this.logs += '<br>' + 'rtc-manager from server';
       switch (data.type) {
         case 'offer':
           console.log('offer received.');
