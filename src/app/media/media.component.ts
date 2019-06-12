@@ -29,11 +29,11 @@ export class MediaComponent implements OnInit {
   incomingCallModel: any;
   outgoingCallModel: any;
 
-  isIncomming= false;
-  isOutgoing= false;
+  isIncomming = false;
+  isOutgoing = false;
 
   constructor() {
-    
+
   }
 
   ngOnInit() {
@@ -52,18 +52,18 @@ export class MediaComponent implements OnInit {
 
     this.incomingCallModel = document.getElementById('#incommingCallModel');
     this.outgoingCallModel = document.getElementById('#outgoingCallModel');
-    
+
 
     this.socket.on('rtc-manager', data => {
       this.rtc_data = data;
-      this.logs += '<br>' + 'rtc-manager from server';
+      this.logs += "<br/> rtc-manager from server";
       switch (data.type) {
         case 'offer':
           console.log('offer received.');
           if (data.calle != null && data.calle === this.username) {
             console.log('this offer for me');
             this.openIncommingCallPopup();
-          //  this.handleOffer(data);
+            //  this.handleOffer(data);
           }
           break;
         case 'answer':
@@ -104,67 +104,74 @@ export class MediaComponent implements OnInit {
     this.callename = calle;
     this.openOutgoingCallPopup();
 
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(myStream => {
-      this.stream = myStream;
-      //            video.src = stream;
-      if ('srcObject' in this.localVideo) {
-        this.localVideo.srcObject = this.stream;
-      } else {
-        // Avoid using this in new browsers, as it is going away.
-        this.localVideo.src = URL.createObjectURL(this.stream);
-      }
-
-
-
-      this.yourConn = new webkitRTCPeerConnection(this.configuration);
-
-      // setup stream listening 
-      this.yourConn.addStream(this.stream);
-
-      //when a remote user adds stream to the peer connection, we display it 
-      this.yourConn.onaddstream = function (e) {
-        if ('srcObject' in this.remoteVideo) {
-          this.remoteVideo.srcObject = e.stream;
+    navigator.mediaDevices.getUserMedia({
+      video: true, audio: true
+    })
+      .then(myStream => {
+        this.yourConn = new webkitRTCPeerConnection(this.configuration);
+        this.stream = myStream;
+        // setup stream listening 
+        this.yourConn.addStream(this.stream);
+        //            video.src = stream;
+        if ('srcObject' in this.localVideo) {
+          this.localVideo.srcObject = this.stream;
         } else {
           // Avoid using this in new browsers, as it is going away.
-          this.remoteVideo.src = URL.createObjectURL(e.stream);
+          this.localVideo.src = URL.createObjectURL(this.stream);
         }
-      };
 
-      // Setup ice handling 
-      this.yourConn.onicecandidate = function (event) {
 
-        if (event.candidate) {
-          const data = {
-            type: 'candidate',
-            caller: this.username,
-            calle: calle,
-            data: event.candidate
-          };
-          this.sendOverSocket(
-            data
-          );
 
-        }
-      };
+        //when a remote user adds stream to the peer connection, we display it 
+        this.yourConn.onaddstream = function (e) {
+          if ('srcObject' in this.remoteVideo) {
+            this.remoteVideo.srcObject = e.stream;
+          } else {
+            // Avoid using this in new browsers, as it is going away.
+            this.remoteVideo.src = URL.createObjectURL(e.stream);
+          }
+        };
 
-      // create an offer 
-      this.yourConn.createOffer().then(function (offer) {
-        return this.yourConn.setLocalDescription(offer);
-      }).then(function(){
-        this.sendOverSocket(
-          {
+        // Setup ice handling 
+        this.yourConn.onicecandidate = function (event) {
+
+          if (event.candidate) {
+            const data = {
+              type: 'candidate',
+              caller: this.username,
+              calle: calle,
+              data: event.candidate
+            };
+            this.sendOverSocket(
+              data
+            );
+
+          }
+        };
+
+        // create an offer 
+        this.yourConn.createOffer().then(offer => {
+          return this.yourConn.setLocalDescription(offer);
+        }).then(function () {
+          this.socket.emit('rtc-manager', {
             type: 'offer',
             caller: this.username,
             calle: calle,
             data: this.yourConn.localDescription
           });
-      }).catch(function (error) {
-        alert("Error when creating an offer");
+          this.sendOverSocket(
+            {
+              type: 'offer',
+              caller: this.username,
+              calle: calle,
+              data: this.yourConn.localDescription
+            });
+        }).catch(function (error) {
+          alert("Error when creating an offer");
+        });
+      }).catch(function (e) {
+        console.log('error : ' + e);
       });
-    }).catch(function (e) {
-      console.log('error : ' + e);
-    });
   }
 
   audioCalling() {
@@ -174,21 +181,21 @@ export class MediaComponent implements OnInit {
 
   // incomming or outgoing call popups
 
-  openIncommingCallPopup(){
+  openIncommingCallPopup() {
     this.isIncomming = true;
-  //  this.incomingCallModel.modal();
+    //  this.incomingCallModel.modal();
   }
 
-  openOutgoingCallPopup(){
+  openOutgoingCallPopup() {
     this.isOutgoing = true;
-  //  this.outgoingCallModel.modal();
+    //  this.outgoingCallModel.modal();
   }
 
 
 
- sendOverSocket(data) {
-  this.socket.emit('rtc-manager', data);
- }
+  sendOverSocket(data) {
+    this.socket.emit('rtc-manager', data);
+  }
 
 
 

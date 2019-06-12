@@ -23,16 +23,14 @@
 
 <div class="container">
   <div class="panel panel-primary">
-    <div class="panel-heading"> {{ username }} </div>
+    <div class="panel-heading"> <div *ngIf="username"> {{ username }} </div></div>
     <div class="panel-body">
-      <h3 *ngIf="username"> {{ username }} </h3>
       <video id="localVideo" autoplay muted></video>
     </div>
   </div>
   <div class="panel panel-primary">
-    <div class="panel-heading"> Other User! </div>
+    <div class="panel-heading"> <div *ngIf="callename"> {{ callename }} </div> </div>
     <div class="panel-body">
-      <h3 *ngIf="callename"> {{ callename }} </h3>
       <video id="remoteVideo" autoplay></video>
     </div>
   </div>
