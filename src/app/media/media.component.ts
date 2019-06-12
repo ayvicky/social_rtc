@@ -135,31 +135,33 @@ export class MediaComponent implements OnInit {
       this.yourConn.onicecandidate = function (event) {
 
         if (event.candidate) {
-          this.socket.emit('rtc-manager', {
+          const data = {
             type: 'candidate',
             caller: this.username,
             calle: calle,
             data: event.candidate
-          });
-        }
+          };
+          this.sendOverSocket(
+            data
+          );
 
+        }
       };
 
       // create an offer 
-      this.yourConn.createOffer(function (offer) {
-        this.socket.emit('rtc-manager', {
-          type: 'offer',
-          caller: this.username,
-          calle: calle,
-          data: offer
-        });
-
-        this.yourConn.setLocalDescription(offer);
-      }, function (error) {
+      this.yourConn.createOffer().then(function (offer) {
+        return this.yourConn.setLocalDescription(offer);
+      }).then(function(){
+        this.sendOverSocket(
+          {
+            type: 'offer',
+            caller: this.username,
+            calle: calle,
+            data: this.yourConn.localDescription
+          });
+      }).catch(function (error) {
         alert("Error when creating an offer");
       });
-
-
     }).catch(function (e) {
       console.log('error : ' + e);
     });
@@ -184,7 +186,9 @@ export class MediaComponent implements OnInit {
 
 
 
-
+ sendOverSocket(data) {
+  this.socket.emit('rtc-manager', data);
+ }
 
 
 
